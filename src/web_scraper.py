@@ -1,0 +1,211 @@
+import requests
+from bs4 import BeautifulSoup
+import os
+import re
+import urllib.parse
+from urllib.request import urlretrieve
+from pathlib import Path
+import hashlib
+
+"""
+Web scraping module for PPT-to-presentation-video.
+This module handles scraping content from websites and organizing it into text and images.
+"""
+
+def scrape_website(url):
+    """
+    Scrape content from a website, extracting text and images.
+    
+    Args:
+        url (str): URL of the website to scrape
+        
+    Returns:
+        tuple: (text content as dict, list of image paths)
+    """
+    try:
+        # Send a GET request to the URL
+        headers = {
+            'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36'
+        }
+        response = requests.get(url, headers=headers)
+        response.raise_for_status()  # Raise an exception for HTTP errors
+        
+        # Parse the HTML content
+        soup = BeautifulSoup(response.text, 'html.parser')
+        
+        # Remove script and style elements
+        for script in soup(["script", "style", "nav", "footer", "header"]):
+            script.extract()
+        
+        # Collect headings and paragraphs
+        content_dict = extract_text_content(soup)
+        
+        # Create temp directory for downloaded images
+        workspace_root = os.path.abspath(os.path.join(os.path.dirname(__file__), ".."))
+        images_dir = os.path.join(workspace_root, "temp", "images")
+        os.makedirs(images_dir, exist_ok=True)
+        
+        # Download images
+        image_paths = download_images(soup, url, images_dir)
+        markdown_content = convert_to_markdown(content_dict, image_paths, url)
+        
+        # Save the markdown content to a file
+        markdown_file_path = os.path.join(workspace_root, "temp", "output.md")
+        with open(markdown_file_path, 'w', encoding='utf-8') as f:
+            f.write(markdown_content)
+        
+        return soup, content_dict, image_paths, markdown_file_path, workspace_root, url
+    
+    except Exception as e:
+        print(f"Error scraping website {url}: {e}")
+        return {}, [], url
+
+def extract_text_content(soup):
+    """
+    Extract headings and paragraphs from the soup object.
+    
+    Args:
+        soup (BeautifulSoup): Parsed HTML content
+        
+    Returns:
+        dict: Dictionary of content sections with their content
+    """
+    content_dict = {
+        'title': '',
+        'sections': []
+    }
+    
+    # Get the title of the page
+    title_tag = soup.find('title')
+    if title_tag:
+        content_dict['title'] = title_tag.get_text().strip()
+    
+    # Get the main content
+    main_content = soup.find('main') or soup.find('article') or soup.find('body')
+    
+    # Collect headings (h1, h2) and paragraphs
+    current_heading = None
+    current_text = []
+    
+    for element in main_content.find_all(['h1', 'h2', 'h3', 'p']):
+        tag_name = element.name
+        text = element.get_text().strip()
+        
+        # Skip empty elements
+        if not text:
+            continue
+            
+        if tag_name in ['h1', 'h2', 'h3']:
+            # Save previous heading and its content
+            if current_heading and current_text:
+                content_dict['sections'].append({
+                    'heading': current_heading,
+                    'content': '\n\n'.join(current_text)
+                })
+                current_text = []
+            
+            current_heading = text
+        
+        elif tag_name == 'p' and len(text) > 15:  # Only include substantive paragraphs
+            current_text.append(text)
+    
+    # Add the last section
+    if current_heading and current_text:
+        content_dict['sections'].append({
+            'heading': current_heading,
+            'content': '\n\n'.join(current_text)
+        })
+    
+    return content_dict
+
+
+def download_images(soup, base_url, images_dir):
+    """
+    Download images from the website.
+    
+    Args:
+        soup (BeautifulSoup): Parsed HTML content
+        base_url (str): Base URL of the website
+        images_dir (str or Path): Directory to save images
+        
+    Returns:
+        list: List of paths to downloaded images
+    """
+    image_paths = []
+    
+    # Ensure images_dir is a Path object
+    images_dir = Path(images_dir)
+    images_dir.mkdir(parents=True, exist_ok=True)  # Create dir if it doesn't exist
+    
+    # Find all img elements
+    img_elements = soup.find_all('img')
+    
+    for i, img in enumerate(img_elements):
+        # Get the image URL
+        img_url = img.get('src')
+        if not img_url:
+            continue
+        
+        # Make the URL absolute if it's relative
+        if not img_url.startswith(('http://', 'https://')):
+            img_url = urllib.parse.urljoin(base_url, img_url)
+        
+        try:
+            # Create a unique filename using hash of the URL
+            img_hash = hashlib.md5(img_url.encode()).hexdigest()
+            file_extension = os.path.splitext(img_url)[1]
+            if not file_extension:
+                file_extension = '.jpg'  # Default extension
+                
+            img_filename = f"image_{i+1}_{img_hash[:8]}{file_extension}"
+            img_path = images_dir / img_filename
+            
+            # Skip if the same image already exists
+            if img_path.exists():
+                image_paths.append(str(img_path))
+                continue
+                
+            # Download the image
+            urlretrieve(img_url, str(img_path))
+            image_paths.append(str(img_path))
+            print(f"Downloaded image: {img_path}")
+            
+        except Exception as e:
+            print(f"Error downloading image {img_url}: {e}")
+    
+    return image_paths
+
+
+
+def convert_to_markdown(content_dict, image_paths, source_url):
+    """
+    Convert the scraped content to markdown format.
+    
+    Args:
+        content_dict (dict): Dictionary of content sections
+        image_paths (list): List of paths to downloaded images
+        source_url (str): Source URL of the content
+        
+    Returns:
+        str: Markdown formatted text
+    """
+    markdown = f"# {content_dict['title']}\n\n"
+    
+    # Add source information
+    markdown += f"Source: [{source_url}]({source_url})\n\n"
+    
+    # Add sections
+    for section in content_dict['sections']:
+        markdown += f"## {section['heading']}\n\n"
+        markdown += f"{section['content']}\n\n"
+    
+    # Add images
+    if image_paths:
+        markdown += "## Images\n\n"
+        for i, img_path in enumerate(image_paths):
+            img_filename = os.path.basename(img_path)
+            # Use relative path for images
+            relative_path = os.path.join("temp", "images", img_filename)
+            markdown += f"![Image {i+1}]({relative_path.replace(os.sep, '/')})\n\n"
+    
+    return markdown
