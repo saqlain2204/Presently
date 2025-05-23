@@ -125,7 +125,7 @@ def add_thank_you_slide(prs):
     run = p.add_run()
     run.text = "Thank You"
     font = run.font
-    font.size = Pt(48)
+    font.size = Pt(40)
     font.bold = True
     font.color.rgb = RGBColor(0, 255, 0) 
     p.alignment = PP_ALIGN.CENTER

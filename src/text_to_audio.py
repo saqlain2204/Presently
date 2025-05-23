@@ -48,6 +48,7 @@ def generate_audio_from_markdown(markdown_text, audio_folder):
                 safe_title = slide_title.replace(' ', '_').replace('/', '_')
                 audio_path = os.path.join(audio_folder, f"{slide_count:02d}_{safe_title}.mp3")
                 print(f"Generating audio for slide '{slide_title}'...")
+                print(text_to_speak)
                 generate_audio(text_to_speak, audio_path)
             # start new slide
             slide_title = line[2:].strip()

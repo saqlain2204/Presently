@@ -15,7 +15,7 @@ def generate_image(text, save_path):
     and save it to `save_path`. Returns the saved image path if successful, else None.
     """
     prompt = (f"Hi, can you create a professional 3D-styled image for a PowerPoint presentation "
-              f"on the topic: {text}")
+              f"on the topic: {text}. Do not include the text in the image. Generate an image which is similar to that.")
 
     try:
         response = client.models.generate_content(
