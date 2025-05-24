@@ -15,7 +15,7 @@ def generate_content(file_path):
         "information from the markdown in minimum of 5 headings and a maximum of 10 headings. The headings should start with # and the content should be in points. "
         "A minimum and maximum of 5 points for each heading. This is your text:\n\n"
         f"{text}\n\n"
-        "Your main task is to create a presentation of the text. So you are supposed to be on point and clear. Always give positive statements and speak as if you are pitching it. Give summaries such that everyone can understand."
+        "Your main task is to create a presentation of the text. So you are supposed to be on point and clear. Always give positive statements and speak as if you are giving the presentation. Give summaries such that everyone can understand."
         "Every slide contains one heading. Under each heading, include 5 points.\n\n"
         "Format strictly like this:\n"
         "Give me the Title of the presentation that starts with ##.\n"

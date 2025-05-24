@@ -74,7 +74,7 @@ def add_content_slide(prs, title, points, image_path):
     
     # Bullet points
     left = Inches(0.5)
-    top = Inches(1.5)
+    top = Inches(1.1)
     width = Inches(4.3)
     height = Inches(4.5)
     body_box = slide.shapes.add_textbox(left, top, width, height)
