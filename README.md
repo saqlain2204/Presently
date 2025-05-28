@@ -41,7 +41,7 @@ Before installing the Python dependencies, make sure you have the following inst
 1. **Clone the repository** (or download and extract the ZIP file)
 
 ```powershell
-git clone https://github.com/yourusername/presently.git
+git clone https://github.com/saqlain2204/presently.git
 cd presently
 ```
 
