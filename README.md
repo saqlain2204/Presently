@@ -2,20 +2,15 @@
 
 <div align="center">
   <img src="media/banner.png" alt="Presently Banner" width="100%">
-  
-  ![Presently Badge](https://img.shields.io/badge/Presently-AI%20Video%20Generator-blue?style=for-the-badge)
 </div>
 
 Presently is an automated tool that transforms web content into professional presentation videos with synchronized narration and background music. Perfect for creating quick, high-quality presentation videos from any web content.
 
-<div align="center">
-  <video autoplay loop muted playsinline style="max-width: 100%;">
-    <source src="media/architecture.mp4" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-</div>
+## Architecture
+![Architecture Preview](media/architecture.gif)
 
-## 🌟 Features
+
+## Features
 
 - **Web Content Scraping**: Extract structured content from any website
 - **AI-Powered Content Generation**: Convert web content into organized presentation slides
@@ -24,7 +19,7 @@ Presently is an automated tool that transforms web content into professional pre
 - **Intelligent Music Selection**: Match background music to your presentation content
 - **Video Production**: Combine slides, narration, and music into a professional video
 
-## 📋 Requirements
+## Requirements
 
 ### Software Dependencies
 
@@ -33,7 +28,7 @@ Presently is an automated tool that transforms web content into professional pre
 - **Poppler**: For PDF processing *(required for PDF-based slide extraction)*
 - **Google API Key**: For AI content generation with Google Gemini
 
-## 🚀 Installation
+## Installation
 
 ### Prerequisites
 
@@ -78,11 +73,11 @@ pip install -r requirements.txt
 5. **Install Poppler**
 
 - Windows:
-  - Download Poppler for Windows from [here](http://blog.alivate.com.au/poppler-windows/)
+  - Download Poppler for Windows
   - Extract to a folder (e.g., `C:\poppler`)
   - Add the `bin` folder to your PATH: `setx PATH "%PATH%;C:\poppler\bin"`
 
-6. **Set up environment variables**
+1. **Set up environment variables**
 
 Create a `.env` file in the project root with your API keys:
 
@@ -90,7 +85,7 @@ Create a `.env` file in the project root with your API keys:
 GOOGLE_API_KEY=your_google_api_key_here
 ```
 
-## 📊 Project Structure
+## Project Structure
 
 ```
 presently/
@@ -121,11 +116,7 @@ presently/
     └── slide_images/
 ```
 
-## 📊 Project Flowchart
-
-A detailed flowchart showing the data flow and processing pipeline is available in `flowchart.md` and `detailed_flowchart.md`.
-
-## 🎮 Usage
+## Usage
 
 ### Basic Usage
 
@@ -151,7 +142,7 @@ The final video will be saved to `temp/presentation_video.mp4`
 5. **Music Selection**: Choose appropriate background music based on content
 6. **Video Generation**: Combine slides, narration, and music into the final video
 
-## ⚙️ Customization
+## Customization
 
 ### Presentation Style
 
@@ -161,7 +152,7 @@ Modify `convert_to_ppt.py` to change the PowerPoint style, colors, or layout.
 
 Place additional music files in the `assets/music` folder to expand the selection options.
 
-## 🔧 Troubleshooting
+## Troubleshooting
 
 ### LibreOffice Issues
 
@@ -178,11 +169,11 @@ Place additional music files in the `assets/music` folder to expand the selectio
 - Verify your Google API key is correctly set in the `.env` file
 - Check for API usage limits or restrictions
 
-## 📄 License
+## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## ✨ Contributing
+## Contributing
 
 Contributions are welcome! Please feel free to submit a Pull Request.
 

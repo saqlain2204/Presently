@@ -34,7 +34,7 @@ def main():
     select_best_music(workspace_root, presentation_content)
     
     print_info("Generating audio narration...")
-    time.sleep(6)
+    # time.sleep(6)
     generate_audio_from_markdown(presentation_content, os.path.join(workspace_root, "temp", "audio"))
     print_success("✓ Audio narration successfully generated")
     

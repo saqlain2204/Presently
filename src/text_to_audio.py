@@ -3,7 +3,6 @@ from google import genai
 from google.genai import types
 import wave
 
-# Initialize client
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def wave_file(filename, pcm, channels=1, rate=24000, sample_width=2):

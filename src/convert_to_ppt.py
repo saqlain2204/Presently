@@ -30,10 +30,10 @@ def parse_markdown(text):
     return title, slides
 
 def add_title_slide(prs, title_text):
-    slide_layout = prs.slide_layouts[6]  # Blank layout for custom dark theme
+    slide_layout = prs.slide_layouts[6] 
     slide = prs.slides.add_slide(slide_layout)
     slide.background.fill.solid()
-    slide.background.fill.fore_color.rgb = RGBColor(30, 30, 30)  # Dark gray background
+    slide.background.fill.fore_color.rgb = RGBColor(30, 30, 30) 
 
     left = Inches(0)
     top = Inches(3)
@@ -47,7 +47,7 @@ def add_title_slide(prs, title_text):
     font = run.font
     font.size = Pt(48)
     font.bold = True
-    font.color.rgb = RGBColor(255, 255, 255)  # White text
+    font.color.rgb = RGBColor(255, 255, 255)
     p.alignment = PP_ALIGN.CENTER
     return slide
 
@@ -55,9 +55,8 @@ def add_content_slide(prs, title, points, image_path):
     blank_slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(blank_slide_layout)
     slide.background.fill.solid()
-    slide.background.fill.fore_color.rgb = RGBColor(30, 30, 30)  # Dark background
+    slide.background.fill.fore_color.rgb = RGBColor(30, 30, 30)
     
-    # Title textbox
     left = Inches(0.5)
     top = Inches(0.3)
     width = Inches(9)
@@ -70,9 +69,8 @@ def add_content_slide(prs, title, points, image_path):
     font = run.font
     font.size = Pt(32)
     font.bold = True
-    font.color.rgb = RGBColor(255, 255, 255)  # White text
+    font.color.rgb = RGBColor(255, 255, 255)
     
-    # Bullet points
     left = Inches(0.5)
     top = Inches(1.1)
     width = Inches(4.3)
@@ -87,11 +85,10 @@ def add_content_slide(prs, title, points, image_path):
         p.text = point
         p.level = 0
         p.font.size = Pt(18)
-        p.font.color.rgb = RGBColor(230, 230, 230)  # Light gray
+        p.font.color.rgb = RGBColor(230, 230, 230)
         p.bullet = True
         p.space_after = Pt(10)
     
-    # Image
     left = Inches(5)
     top = Inches(1.5)
     width = Inches(4.5)
@@ -134,7 +131,6 @@ def add_thank_you_slide(prs):
 
 
 def markdown_to_ppt(workspace_dir, output_file="presentation.ppt"):
-    # Read markdown text
     md_path = os.path.join(workspace_dir, "temp", "presentation.md")
     images_dir = os.path.join(workspace_dir, "temp", "images")
     
@@ -144,18 +140,14 @@ def markdown_to_ppt(workspace_dir, output_file="presentation.ppt"):
     title, slides = parse_markdown(markdown_text)
     prs = Presentation()
     
-    # Add title slide
     add_title_slide(prs, title if title else "Presentation")
     
-    # Add content slides with images if found
     for slide_data in slides:
         check_text = " ".join(slide_data['points'])
         images_dir = os.path.join(workspace_dir, "temp", "images")
 
-        # Try to find best matching image
         image_path = find_best_matching_image(images_dir, check_text)
 
-        # If no matching image, generate a new one
         if not image_path:
             generated_image_path = os.path.join(
                 images_dir, f"{slide_data['title'].replace(' ', '_')}.png"
@@ -164,13 +156,10 @@ def markdown_to_ppt(workspace_dir, output_file="presentation.ppt"):
 
         add_content_slide(prs, slide_data['title'], slide_data['points'], image_path)
 
-        # Optionally remove the image after use
         if image_path and os.path.exists(image_path):
             os.remove(image_path)
     
-    # Add thank you slide
     add_thank_you_slide(prs)
     
-    # Save presentation
     prs.save(output_file)
     print(f"Presentation saved as {output_file}")

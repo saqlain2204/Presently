@@ -2,7 +2,6 @@ import google.generativeai as genai
 from dotenv import load_dotenv
 import os
 
-# Load environment variables
 load_dotenv()
 genai.configure(api_key=os.getenv("GOOGLE_API_KEY"))
 
@@ -30,7 +29,6 @@ def generate_content(file_path):
         "Strictly maintain the format. Do not Alter it. Do not include any special charaters like ':' in the headings."
     )
 
-    # Use Gemini Pro
     model = genai.GenerativeModel('gemini-1.5-flash')
     response = model.generate_content(prompt)
 

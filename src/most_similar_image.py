@@ -3,21 +3,18 @@ from dotenv import load_dotenv
 import os
 from google import genai
 
-# Load environment variables
 load_dotenv()
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 def find_best_matching_image(images_dir, text_query):
     best_image_path = None
-    best_score = -float('inf')  # Or -1 if score is positive only
+    best_score = -float('inf') 
     
     for img_name in os.listdir(images_dir):
         if img_name.lower().endswith(('.png', '.jpg', '.jpeg', '.bmp', '.gif')):
             img_path = os.path.join(images_dir, img_name)
             try:
-                # Upload image file to Gemini
                 my_file = client.files.upload(file=img_path)
                 
-                # Generate content asking Gemini to relate image with the text query
                 prompt = f"How well does this image match this text? \"{text_query}\" Rate from 0 to 10. Only return the number. Nothing else. If the text matches the image little also its fine, give a good score"
                 
                 response = client.models.generate_content(
@@ -28,9 +25,8 @@ def find_best_matching_image(images_dir, text_query):
                 response_text = response.text.strip()
                 print(f"Image: {img_name}, Response: {response_text}")
                 
-                # Extract numeric score from response_text, fallback to 0 if not found
                 try:
-                    score = float(response_text.split()[0])  # naive parse first word as score
+                    score = float(response_text.split()[0]) 
                 except Exception:
                     score = 0
                 

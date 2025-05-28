@@ -7,7 +7,6 @@ def ppt_to_images(workspace_root):
     pdf_file = os.path.join(workspace_root, "temp", "presentation.pdf")
     output_folder = os.path.join(workspace_root, "temp", "slide_images")
 
-    # Convert PPT to PDF using LibreOffice
     command = [
         "soffice",
         "--headless",
@@ -17,7 +16,6 @@ def ppt_to_images(workspace_root):
     ]
     subprocess.run(command, check=True)
 
-    # Convert PDF pages to images
     os.makedirs(output_folder, exist_ok=True)
     images = convert_from_path(pdf_file)
     image_paths = []
