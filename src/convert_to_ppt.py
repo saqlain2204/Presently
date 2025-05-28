@@ -133,7 +133,7 @@ def add_thank_you_slide(prs):
 
 
 
-def markdown_to_ppt(workspace_dir, output_file="presentation.pptx"):
+def markdown_to_ppt(workspace_dir, output_file="presentation.ppt"):
     # Read markdown text
     md_path = os.path.join(workspace_dir, "temp", "presentation.md")
     images_dir = os.path.join(workspace_dir, "temp", "images")
