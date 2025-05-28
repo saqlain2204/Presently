@@ -12,17 +12,7 @@ load_dotenv()
 client = genai.Client(api_key=os.getenv("GOOGLE_API_KEY"))
 
 def select_best_music(workspace_root, content_text):
-    """
-    Select the most appropriate background music for a presentation based on content.
     
-    Args:
-        workspace_root (str): Root directory of the project
-        content_text (str): Content text to match with music
-        
-    Returns:
-        str: Path to the selected music file in temp directory
-    """
-    # Music is in the music subfolder of assets
     music_dir = os.path.join(workspace_root, "assets", "music")
     print_info(f"Searching for appropriate music in: {music_dir}")
     
@@ -32,7 +22,6 @@ def select_best_music(workspace_root, content_text):
     best_music_path = None
     best_score = -float('inf')
     
-    # Extract keywords from content for better music matching
     try:
         keyword_prompt = (
             f"Extract 5-7 keywords from this text that describe its mood, tone, and subject matter. "
@@ -49,17 +38,14 @@ def select_best_music(workspace_root, content_text):
         print_info(f"Extracted keywords: {keywords}")
     except Exception as e:
         print(f"Failed to extract keywords: {e}")
-        keywords = "professional, informative"  # Default fallback
+        keywords = "professional, informative" 
 
-    # Check if music directory exists
     if not os.path.exists(music_dir):
         print_info("Music directory not found, trying alternate location")
-        # Try alternate location
         music_dir = os.path.join(workspace_root, "assets")
         if not os.path.exists(music_dir):
             raise FileNotFoundError(f"Neither assets/music nor assets directory found")
             
-    # List available music files
     music_files = [f for f in os.listdir(music_dir) 
                   if f.lower().endswith(('.mp3', '.wav', '.ogg', '.flac'))]
     
@@ -71,7 +57,6 @@ def select_best_music(workspace_root, content_text):
     for music_file in music_files:
         music_path = os.path.join(music_dir, music_file)
         try:
-            # Extract music name without extension for better analysis
             music_name = os.path.splitext(music_file)[0]
             
             prompt = (
@@ -89,14 +74,13 @@ def select_best_music(workspace_root, content_text):
 
             score_text = response.text.strip()
             
-            # Extract just the number from the response
             import re
             score_match = re.search(r'\b([0-9]|10)(\.[0-9]+)?\b', score_text)
             
             if score_match:
                 score = float(score_match.group(0))
             else:
-                score = 5.0  # Default middle score
+                score = 5.0 
                 
             print_info(f"Music: {music_file}, Score: {score}/10")
 

@@ -7,6 +7,7 @@ from convert_to_images import ppt_to_images
 from generate_video import create_presentation_video
 from terminal_utils import print_success, print_info, print_header
 from music_selection import select_best_music
+import time
 
 
 def main():
@@ -33,6 +34,7 @@ def main():
     select_best_music(workspace_root, presentation_content)
     
     print_info("Generating audio narration...")
+    time.sleep(6)
     generate_audio_from_markdown(presentation_content, os.path.join(workspace_root, "temp", "audio"))
     print_success("✓ Audio narration successfully generated")
     

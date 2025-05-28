@@ -1,5 +1,5 @@
 import os
-from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, afx
+from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, afx, concatenate_audioclips
 
 def create_presentation_video(workspace_root):
     slide_images_folder = os.path.join(workspace_root, "temp", "slide_images")
@@ -10,6 +10,7 @@ def create_presentation_video(workspace_root):
     slide_images = sorted([f for f in os.listdir(slide_images_folder) if f.endswith('.png')])
     audio_files = sorted([f for f in os.listdir(audio_folder) if f.endswith(('.mp3', '.wav'))])
 
+    
     clips = []
 
     # 1️⃣ Create slide clips with individual audio
@@ -34,9 +35,10 @@ def create_presentation_video(workspace_root):
     # 3️⃣ Prepare background music: Loop if shorter
     total_duration = final_video.duration
     bg_music_clip = AudioFileClip(background_music_path)
+    bg_music_clip = concatenate_audioclips([bg_music_clip.subclip(0, bg_music_clip.duration-10), bg_music_clip.subclip(5, bg_music_clip.duration-10)])
     if bg_music_clip.duration < total_duration:
         loops_needed = int(total_duration // bg_music_clip.duration) + 1
-        bg_music_clip = concatenate_videoclips([bg_music_clip] * loops_needed)
+        bg_music_clip = concatenate_audioclips([bg_music_clip] * loops_needed)
     bg_music_clip = bg_music_clip.subclip(0, total_duration)
 
     # 4️⃣ Apply fade-in and fade-out (only at start and end of final music)

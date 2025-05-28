@@ -1,8 +1,3 @@
-"""
-Utility functions for terminal output formatting.
-"""
-
-# ANSI color codes
 class Colors:
     GREEN = '\033[92m'
     YELLOW = '\033[93m'

@@ -27,7 +27,7 @@ def generate_content(file_path):
         "- Point 4\n"
         "- Point 5\n\n"
         "Return only markdown. Do not add any other explanations or summaries."
-        "Strictly maintain the format. Do not Alter it.\n"
+        "Strictly maintain the format. Do not Alter it. Do not include any special charaters like ':' in the headings."
     )
 
     # Use Gemini Pro
