@@ -133,7 +133,7 @@ When prompted, enter the URL of the webpage you want to convert into a presentat
 
 The final video will be saved to `temp/presentation_video.mp4`
 
-## 🔄 Pipeline Process
+## Pipeline Process
 
 1. **Web Scraping**: Extract content from the provided URL
 2. **Content Generation**: Process and organize the content for presentation
