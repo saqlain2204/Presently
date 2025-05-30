@@ -9,6 +9,8 @@ Presently is an automated tool that transforms web content into professional pre
 ## Architecture
 ![Architecture Preview](media/architecture.gif)
 
+## Example
+![Example Video](media/example.mp4)
 
 ## Features
 
@@ -41,7 +43,7 @@ Before installing the Python dependencies, make sure you have the following inst
 1. **Clone the repository** (or download and extract the ZIP file)
 
 ```powershell
-git clone https://github.com/yourusername/presently.git
+git clone https://github.com/saqlain2204/presently.git
 cd presently
 ```
 
@@ -133,7 +135,7 @@ When prompted, enter the URL of the webpage you want to convert into a presentat
 
 The final video will be saved to `temp/presentation_video.mp4`
 
-## 🔄 Pipeline Process
+## Pipeline Process
 
 1. **Web Scraping**: Extract content from the provided URL
 2. **Content Generation**: Process and organize the content for presentation
