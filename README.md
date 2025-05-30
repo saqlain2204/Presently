@@ -9,6 +9,8 @@ Presently is an automated tool that transforms web content into professional pre
 ## Architecture
 ![Architecture Preview](media/architecture.gif)
 
+## Example
+![Example Video](media/example.mp4)
 
 ## Features
 
