@@ -1,5 +1,6 @@
 import os
 from moviepy.editor import ImageClip, AudioFileClip, concatenate_videoclips, CompositeAudioClip, afx, concatenate_audioclips
+import re
 
 def create_presentation_video(workspace_root):
     slide_images_folder = os.path.join(workspace_root, "temp", "slide_images")
@@ -12,8 +13,15 @@ def create_presentation_video(workspace_root):
 
     clips = []
 
+    def extract_number(filename):
+        match = re.search(r'(\d+)', filename)
+        return int(match.group(0)) if match else -1
+
+    slide_images = sorted(slide_images, key=extract_number)
+    # print(slide_images)
     for i, slide_img in enumerate(slide_images):
         slide_path = os.path.join(slide_images_folder, slide_img)
+        # print(slide_img)
         if i == 0 or i == len(slide_images) - 1:
             duration = 3
             clip = ImageClip(slide_path).set_duration(duration)
@@ -49,3 +57,5 @@ def create_presentation_video(workspace_root):
 
     final_video.write_videofile(output_path, fps=24)
     print(f"Video saved to: {output_path}")
+
+# create_presentation_video("D:\Saqlain\Personal Projects\PPT-to-presentation-video")
