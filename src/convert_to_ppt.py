@@ -33,7 +33,7 @@ def add_title_slide(prs, title_text):
     slide_layout = prs.slide_layouts[6] 
     slide = prs.slides.add_slide(slide_layout)
     slide.background.fill.solid()
-    slide.background.fill.fore_color.rgb = RGBColor(30, 30, 30) 
+    slide.background.fill.fore_color.rgb = RGBColor(255, 255, 255) 
 
     left = Inches(0)
     top = Inches(3)
@@ -47,7 +47,7 @@ def add_title_slide(prs, title_text):
     font = run.font
     font.size = Pt(48)
     font.bold = True
-    font.color.rgb = RGBColor(255, 255, 255)
+    font.color.rgb = RGBColor(0, 0, 0)
     p.alignment = PP_ALIGN.CENTER
     return slide
 
@@ -55,7 +55,7 @@ def add_content_slide(prs, title, points, image_path):
     blank_slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(blank_slide_layout)
     slide.background.fill.solid()
-    slide.background.fill.fore_color.rgb = RGBColor(30, 30, 30)
+    slide.background.fill.fore_color.rgb = RGBColor(255, 255, 255)
     
     left = Inches(0.5)
     top = Inches(0.3)
@@ -69,7 +69,7 @@ def add_content_slide(prs, title, points, image_path):
     font = run.font
     font.size = Pt(32)
     font.bold = True
-    font.color.rgb = RGBColor(255, 255, 255)
+    font.color.rgb = RGBColor(0, 0, 0)
     
     left = Inches(0.5)
     top = Inches(1.1)
@@ -79,13 +79,12 @@ def add_content_slide(prs, title, points, image_path):
     tf = body_box.text_frame
     tf.word_wrap = True
     tf.clear()
-    
     for point in points:
         p = tf.add_paragraph()
         p.text = point
         p.level = 0
         p.font.size = Pt(18)
-        p.font.color.rgb = RGBColor(230, 230, 230)
+        p.font.color.rgb = RGBColor(50, 50, 50)
         p.bullet = True
         p.space_after = Pt(10)
     
@@ -110,7 +109,7 @@ def add_thank_you_slide(prs):
     slide_layout = prs.slide_layouts[6]
     slide = prs.slides.add_slide(slide_layout)
     slide.background.fill.solid()
-    slide.background.fill.fore_color.rgb = RGBColor(30, 30, 30)
+    slide.background.fill.fore_color.rgb = RGBColor(255, 255, 255)
 
     left = Inches(0)
     top = Inches(3)
@@ -124,7 +123,7 @@ def add_thank_you_slide(prs):
     font = run.font
     font.size = Pt(40)
     font.bold = True
-    font.color.rgb = RGBColor(0, 255, 0) 
+    font.color.rgb = RGBColor(0, 128, 0) 
     p.alignment = PP_ALIGN.CENTER
     return slide
 
