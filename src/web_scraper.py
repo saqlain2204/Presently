@@ -119,7 +119,6 @@ def download_images(soup, base_url, images_dir):
     images_dir.mkdir(parents=True, exist_ok=True) 
     
     img_elements = soup.find_all('img')
-    
     for i, img in enumerate(img_elements):
         img_url = img.get('src')
         if not img_url:
@@ -129,12 +128,31 @@ def download_images(soup, base_url, images_dir):
             img_url = urllib.parse.urljoin(base_url, img_url)
         
         try:
-            img_hash = hashlib.md5(img_url.encode()).hexdigest()
             file_extension = os.path.splitext(img_url)[1]
             if not file_extension:
                 file_extension = '.jpg'
-                
-            img_filename = f"image_{i+1}_{img_hash[:8]}{file_extension}"
+            
+            # Try to get alt text for the image
+            alt_text = img.get('alt')
+            
+            if alt_text and alt_text.strip():
+                # Clean the alt text to make it a valid filename
+                safe_alt_text = re.sub(r'[\\/*?:"<>|]', '', alt_text)  # Remove invalid filename chars
+                safe_alt_text = re.sub(r'\s+', '_', safe_alt_text)     # Replace spaces with underscores
+                safe_alt_text = safe_alt_text[:50]                     # Limit length
+                img_filename = f"{safe_alt_text}{file_extension}"
+            else:
+                # Fall back to the original naming scheme
+                img_hash = hashlib.md5(img_url.encode()).hexdigest()
+                img_filename = f"image_{i+1}_{img_hash[:8]}{file_extension}"
+            
+            # Handle duplicate filenames by appending a counter if needed
+            base_filename = os.path.splitext(img_filename)[0]
+            counter = 0
+            while (images_dir / img_filename).exists():
+                counter += 1
+                img_filename = f"{base_filename}_{counter}{file_extension}"
+            
             img_path = images_dir / img_filename
             
             if img_path.exists():
