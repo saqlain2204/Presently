@@ -38,21 +38,19 @@ def find_best_matching_image(images_dir, text_query):
                 
                 logo_result = logo_response.text.strip()
                 print(f"Logo check for {img_name}: {logo_result}")
-                  # If it's a company logo, move it to a logos subdirectory and skip it
+
                 if "COMPANY_LOGO" in logo_result:
                     print(f"Detected company logo: {img_name}")
                     
-                    # Create a logos directory if it doesn't exist
                     logos_dir = os.path.join(os.path.dirname(images_dir), "logos")
                     os.makedirs(logos_dir, exist_ok=True)
                     
-                    # Move the logo file to the logos directory
                     logo_destination = os.path.join(logos_dir, img_name)
                     try:
                         shutil.move(img_path, logo_destination)
                         print(f"Moved company logo to: {logo_destination}")
                     except Exception as e:
-                        # If moving fails, just remove the file
+
                         print(f"Failed to move logo, removing instead: {e}")
                         try:
                             os.remove(img_path)
@@ -60,10 +58,8 @@ def find_best_matching_image(images_dir, text_query):
                         except:
                             pass
                     
-                    # Skip this image
                     continue
                 
-                # Re-upload the file for content matching if it's not a logo
                 my_file = client.files.upload(file=img_path)
                 
                 prompt = f"""
@@ -112,9 +108,6 @@ def find_best_matching_image(images_dir, text_query):
     
     print(f"Best matching image score: {best_score:.1f}")
     
-    # Only return the image if score is above threshold
     if best_score:
         return best_image_path
-    else:
-        print(f"No image with score above threshold ({threshold_score})")
-        return None
+    return None
